@@ -58,6 +58,29 @@ def _drift_output(table, destination: Path) -> None:
     drift = drift_table(table)
     write_drift_csv(drift, destination)
     summary = drift_vs_error(table)
+    summary_path = destination.with_name("drift-summary.txt")
+    over_representation = (
+        summary["flipped_wrong_share"] / summary["flipped_test_share"]
+        if summary["flipped_test_share"]
+        else 0.0
+    )
+    summary_lines = [
+        f"flipped names: {len(drift)}",
+        f"test rows: {summary['test_rows']}",
+        f"flipped test rows: {summary['flipped_test_rows']}",
+        f"stable test rows: {summary['stable_test_rows']}",
+        f"wrong test rows: {summary['wrong_test_rows']}",
+        f"flipped wrong rows: {summary['flipped_wrong_rows']} of {summary['wrong_test_rows']} wrong test rows",
+        f"stable wrong rows: {summary['stable_wrong_rows']} of {summary['wrong_test_rows']} wrong test rows",
+        f"flipped wrong share: {summary['flipped_wrong_share']:.4f} ({summary['flipped_wrong_share'] * 100:.2f}%; {summary['flipped_wrong_rows']} of {summary['wrong_test_rows']} wrong test rows)",
+        f"flipped test share: {summary['flipped_test_share']:.4f} ({summary['flipped_test_share'] * 100:.2f}%; {summary['flipped_test_rows']} of {summary['test_rows']} test rows)",
+        f"over-representation factor: {over_representation:.1f} (wrong share {summary['flipped_wrong_rows']} of {summary['wrong_test_rows']}; test share {summary['flipped_test_rows']} of {summary['test_rows']})",
+        f"flipped accuracy: {summary['flipped_accuracy']:.4f} ({summary['flipped_test_rows']} test rows)",
+        f"stable accuracy: {summary['stable_accuracy']:.4f} ({summary['stable_test_rows']} test rows)",
+        f"flipped test names: {summary['flipped_test_names']}",
+        f"stable test names: {summary['stable_test_names']}",
+    ]
+    summary_path.write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
     print(f"Drift summary: {len(drift)} flipped names")
     print(
         f"Flipped accuracy={summary['flipped_accuracy']:.4f} "
