@@ -1,0 +1,16 @@
+Name-gender classifier evaluation (split by name)
+
+majority: accuracy=0.4980 (test rows=48846, test names=1357)
+last_letter: accuracy=0.8051 (test rows=48846, test names=1357)
+name_lookup: accuracy=0.4980 (test rows=48846, test names=1357)
+model: accuracy=0.8461 (test rows=48846, test names=1357)
+
+Ambiguity breakdown:
+nearly pure: accuracy=0.8539 (test rows=47093, test names=1355)
+fairly skewed: accuracy=0.6258 (test rows=318, test names=38)
+ambiguous: accuracy=0.6538 (test rows=491, test names=44)
+very ambiguous: accuracy=0.6320 (test rows=943, test names=58)
+genuinely 50/50: too small to interpret (test rows=1, test names=1)
+
+Leakage comparison (same table, target, and model; only the split differs): name split accuracy=0.8461 (test rows=48846, test names=1357), row split accuracy=0.9669 (test rows=48816, test names=5409), inflation=0.1208
+Legacy illusion: accuracy=1.0000 (test rows=10, test names=10, same data fit and score)

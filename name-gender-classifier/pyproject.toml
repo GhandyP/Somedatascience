@@ -16,6 +16,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest==8.4.2"]
 
+[project.scripts]
+namegender = "namegender.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["namegender"]

@@ -125,7 +125,10 @@ def test_importing_data_does_not_create_socket():
     script = f"""
 import urllib.request
 import socket
-socket.socket = lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError('socket created'))
+def blocked_connection(*args, **kwargs):
+    raise AssertionError('network connection')
+socket.socket.connect = blocked_connection
+socket.create_connection = blocked_connection
 import sys
 sys.path.insert(0, {str(src_path)!r})
 import namegender.data
