@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Test and reproduce reports (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install project and test dependencies
+        working-directory: name-gender-classifier
+        run: make setup
+
+      # The tests use the full pinned dataset, so fetch it before running them.
+      - name: Fetch pinned dataset
+        working-directory: name-gender-classifier
+        run: make data
+
+      - name: Run tests
+        working-directory: name-gender-classifier
+        run: make test
+
+      # Reproduction must leave the committed reports byte-identical.
+      - name: Verify reports are reproducible
+        working-directory: name-gender-classifier
+        run: |
+          make reproduce
+          git diff --exit-code -- reports/
