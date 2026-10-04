@@ -9,6 +9,7 @@ __pycache__/
 .venv/
 venv/
 env/
+hk-rainfall/.red-venv/
 
 # Test and coverage caches
 .pytest_cache/

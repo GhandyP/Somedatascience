@@ -10,4 +10,20 @@ The archive is pinned to Kaggle v2 and SHA-256 `73bba9f13dd13ba2c8b5e92f72b1da5b
 
 The parser decodes source CSV as GB18030, preserves the exact source headers in provenance (including `temparature` and `low visibility hour`), and validates the observed 17-column schema: `year`, `month`, and `day` supply the calendar components from which it derives the canonical analysis `date`. It checks non-empty input, unique increasing daily dates, continuous coverage, and the documented date endpoints. Downstream analysis should normalize source headers separately. In rainfall, `-` means not detected and is a non-event; `微量` denotes trace presence and is an event. Blank and `-` in other measurement columns are treated as missing measurements, not rainfall states.
 
-Offline focused tests use synthetic data and mocked downloads: `name-gender-classifier/.venv/bin/python -m pytest -q hk-rainfall/tests`.
+## Setup and offline tests
+
+From the repository root, create an isolated environment and install the pinned project and test dependencies:
+
+```sh
+python3 -m venv hk-rainfall/.venv
+hk-rainfall/.venv/bin/python -m pip install -e 'hk-rainfall[test]'
+```
+
+If your Python installation omits `ensurepip`, create the same environment with `uv venv --seed hk-rainfall/.venv` instead.
+
+Offline tests use synthetic data and mocked downloads; no Kaggle credentials or network access are needed:
+
+```sh
+cd hk-rainfall
+.venv/bin/python -m pytest -q tests
+```
