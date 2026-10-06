@@ -108,6 +108,22 @@ def test_download_raw_works_offline_with_file_url(tmp_path, monkeypatch):
     assert destination.read_bytes() == content
 
 
+def test_download_raw_removes_temporary_file_when_integrity_fails(tmp_path, monkeypatch):
+    import namegender.data as data_module
+
+    source = tmp_path / "source.csv"
+    source.write_bytes(b"completed download with invalid integrity")
+    monkeypatch.setattr(data_module, "EXPECTED_SHA256", "0" * 64)
+    monkeypatch.setattr(data_module, "EXPECTED_BYTES", len(source.read_bytes()))
+    destination = tmp_path / "download.csv"
+
+    with pytest.raises(IntegrityError):
+        download_raw(destination, url=source.resolve().as_uri())
+
+    assert not destination.exists()
+    assert list(tmp_path.glob(f".{destination.name}.*")) == []
+
+
 def test_default_load_checks_integrity_before_parsing(tmp_path, monkeypatch):
     import namegender.data as data_module
 
