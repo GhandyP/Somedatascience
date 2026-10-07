@@ -1,0 +1,14 @@
+flipped names: 154
+test rows: 48846
+flipped test rows: 2303
+stable test rows: 46543
+wrong test rows: 7519
+flipped wrong rows: 909 of 7519 wrong test rows
+stable wrong rows: 6610 of 7519 wrong test rows
+flipped wrong share: 0.1209 (12.09%; 909 of 7519 wrong test rows)
+flipped test share: 0.0471 (4.71%; 2303 of 48846 test rows)
+over-representation factor: 2.6 (wrong share 909 of 7519; test share 2303 of 48846)
+flipped accuracy: 0.6053 (2303 test rows)
+stable accuracy: 0.8580 (46543 test rows)
+flipped test names: 36
+stable test names: 1321
