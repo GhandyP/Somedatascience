@@ -1,0 +1,28 @@
+# Local Pi runtime state
+.atl/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and coverage caches
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# ODD working state
+odd/
+
+# Project data cache
+name-gender-classifier/data/
