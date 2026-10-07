@@ -89,8 +89,10 @@ def test_importing_drift_reads_no_dataset_and_opens_no_socket():
     script = "\n".join(
         [
             "import socket",
-            "socket.socket = lambda *a, **k: (_ for _ in ()).throw(",
-            "    AssertionError('socket created'))",
+            "def blocked_connection(*args, **kwargs):",
+            "    raise AssertionError('network connection')",
+            "socket.socket.connect = blocked_connection",
+            "socket.create_connection = blocked_connection",
             "import sys",
             f"sys.path.insert(0, {src!r})",
             "import namegender.drift as d",
