@@ -9,6 +9,7 @@ __pycache__/
 .venv/
 venv/
 env/
+hk-rainfall/.red-venv/
 
 # Test and coverage caches
 .pytest_cache/
@@ -26,3 +27,4 @@ odd/
 
 # Project data cache
 name-gender-classifier/data/
+hk-rainfall/data/

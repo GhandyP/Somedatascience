@@ -39,3 +39,41 @@ jobs:
         run: |
           make reproduce
           git diff --exit-code -- reports/
+
+  hk-rainfall:
+    name: Test Hong Kong rainfall (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install project and test dependencies
+        working-directory: hk-rainfall
+        run: make setup
+
+      # The Hong Kong tests are offline; dependency installation is a separate step.
+      - name: Run offline tests
+        working-directory: hk-rainfall
+        run: make test
+
+      - name: Compile Python modules
+        working-directory: hk-rainfall
+        run: python -m compileall -q src/hk_rainfall tests
+
+      - name: Verify bounded deterministic CLI behavior
+        working-directory: hk-rainfall
+        run: .venv/bin/python -m pytest -q tests/test_cli.py::test_reproduce_emits_aggregate_only_deterministic_json
+
+      - name: Assert no Kaggle archive or evaluation report was generated
+        working-directory: hk-rainfall
+        run: |
+          test ! -e data/hongkongrainfall-v2.zip
+          test ! -e reports/evaluation.json
