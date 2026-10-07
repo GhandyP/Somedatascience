@@ -88,3 +88,13 @@ The committed evidence is [`reports/evaluation.txt`](reports/evaluation.txt), [`
 - Coverage is limited to the top 1,000 names per sex per year.
 - The label is a dominant-gender summary: a name that flipped is represented by one label per year, not by a distribution.
 - The model captures orthographic association in US baby-name data. It makes no claim about any individual.
+
+## Regenerate the sample fixture
+
+To regenerate the committed sample fixture, run `make regenerate-fixture` from
+this directory. This is strictly offline: it reads only the existing
+`data/raw/baby-names.csv` cache and fails if that file is absent. The selection
+keeps the first 30 source rows per `(year, sex)` for 1880 and 1881, in global
+source order. Output is UTF-8 CSV with the source header quoted, `name` and
+`sex` fields quoted (with embedded quotes doubled), `year` and `percent` fields
+unquoted, and LF (`\\n`) line endings.

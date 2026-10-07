@@ -3,7 +3,7 @@
 VENV ?= .venv
 PYTHON := $(VENV)/bin/python
 
-.PHONY: setup data test reproduce clean clean-reports help
+.PHONY: setup data test reproduce regenerate-fixture clean clean-reports help
 
 define require_venv
 	@if [ ! -x "$(PYTHON)" ]; then \
@@ -27,6 +27,10 @@ data:
 test:
 	$(require_venv)
 	$(PYTHON) -m pytest -q
+
+# Regenerate the committed sample from the local raw cache only; never downloads.
+regenerate-fixture:
+	python3 scripts/regenerate_fixture.py
 
 # Run the full pipeline and write reproducible reports.
 reproduce:
